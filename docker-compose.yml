@@ -7,23 +7,15 @@ services:
       dockerfile: .dockerfile
     image: matizo/code-server:custom
     restart: unless-stopped
+    privileged: true                  # executa com todas as capacidades do host
     networks:
       - dokploy-network
 
     volumes:
-      # Named volumes (serão criados localmente pelo Docker)
       - code_server_config:/config
       - code_server_projects:/home/coder/projects
-      # Docker-in-Docker via socket do host
       - /var/run/docker.sock:/var/run/docker.sock
-      # compartilha o binário do dokploy com a code server permitindo usar o comando Docker
       - /usr/bin/docker:/usr/bin/docker:ro
-
-    # Adiciona o grupo Docker do host para acesso ao socket.
-    # Para descobrir o GID correto, execute no host:
-    #   getent group docker | cut -d: -f3
-    group_add:
-      - ${DOCKER_GID}
 
     environment:
       - PUID=1000
