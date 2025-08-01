@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     networks:
       - dokploy-network
+
     volumes:
       # Named volumes (serão criados localmente pelo Docker)
       - code_server_config:/config
@@ -17,11 +18,19 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       # compartilha o binário do dokploy com a code server permitindo usar o comando Docker
       - /usr/bin/docker:/usr/bin/docker:ro
+
+    # Adiciona o grupo Docker do host para acesso ao socket.
+    # Para descobrir o GID correto, execute no host:
+    #   getent group docker | cut -d: -f3
+    group_add:
+      - ${DOCKER_GID}
+
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Sao_Paulo
       - PASSWORD=${CODE_SERVER_PASSWORD}
+
     healthcheck:
       test: ["CMD", "curl", "-fsSL", "http://localhost:8443/healthz"]
       interval: 30s
@@ -29,7 +38,7 @@ services:
       retries: 3
 
 volumes:
-  code_server_config:    # agora locais, sem 'external: true'
+  code_server_config:
   code_server_projects:
 
 networks:
