@@ -1,29 +1,36 @@
+version: "3.8"
+
 services:
   code-server:
     build:
       context: .
-      dockerfile: Dockerfile.code-server
+      dockerfile: .dockerfile
     image: matizo/code-server:custom
     restart: unless-stopped
-    network_mode: host           # usa a rede do host, assim o Supabase conecta em localhost
-    privileged: true             # mantém as capacidades completas
-    group_add:
-      - "988"                    # GID do grupo docker no host
 
+    # conecta o code-server à rede externa já existente
+    networks:
+      - dokploy-network
+
+    # montagens de volumes e socket do Docker
     volumes:
       - code_server_config:/config
       - code_server_projects:/home/coder/projects
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker:ro
 
+    # garante que o usuário interno possa usar o socket
+    group_add:
+      - "${DOCKER_GID}"      # defina DOCKER_GID no .env ou no UI do Dokploy
+
     environment:
-      PUID: "1000"
-      PGID: "1000"
-      TZ: "America/Sao_Paulo"
-      PASSWORD: "${CODE_SERVER_PASSWORD}"
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - PASSWORD=${CODE_SERVER_PASSWORD}
 
     healthcheck:
-      test: ["CMD","curl","-fsSL","http://localhost:8443/healthz"]
+      test: ["CMD", "curl", "-fsSL", "http://localhost:8443/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -31,3 +38,7 @@ services:
 volumes:
   code_server_config:
   code_server_projects:
+
+networks:
+  dokploy-network:
+    external: true
