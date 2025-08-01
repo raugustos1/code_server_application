@@ -4,7 +4,7 @@ services:
   code-server:
     build:
       context: .
-      dockerfile: Dockerfile.code-server
+      dockerfile: .dockerfile
     image: matizo/code-server:custom
     restart: unless-stopped
     networks:
