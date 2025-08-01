@@ -2,11 +2,13 @@ services:
   code-server:
     build:
       context: .
-      dockerfile: .dockerfile
+      dockerfile: Dockerfile.code-server
     image: matizo/code-server:custom
     restart: unless-stopped
-    privileged: true
-    network_mode: host
+    network_mode: host           # usa a rede do host, assim o Supabase conecta em localhost
+    privileged: true             # mantém as capacidades completas
+    group_add:
+      - "988"                    # GID do grupo docker no host
 
     volumes:
       - code_server_config:/config
@@ -15,13 +17,13 @@ services:
       - /usr/bin/docker:/usr/bin/docker:ro
 
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Sao_Paulo
-      - PASSWORD=${CODE_SERVER_PASSWORD}
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "America/Sao_Paulo"
+      PASSWORD: "${CODE_SERVER_PASSWORD}"
 
     healthcheck:
-      test: ["CMD", "curl", "-fsSL","http://localhost:8443/healthz"]
+      test: ["CMD","curl","-fsSL","http://localhost:8443/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3
