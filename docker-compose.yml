@@ -1,7 +1,3 @@
-# docker-compose.yml corrigido
-
-version: "3.8"
-
 services:
   code-server:
     build:
