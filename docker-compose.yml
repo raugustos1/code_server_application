@@ -10,6 +10,8 @@ services:
     privileged: true                  # executa com todas as capacidades do host
     networks:
       - dokploy-network
+    # Compartilha a rede com o host para que 'localhost' seja o host real:
+    network_mode: host
 
     volumes:
       - code_server_config:/config
