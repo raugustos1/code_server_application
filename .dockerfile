@@ -28,5 +28,4 @@ RUN corepack enable \
 # (Opcional) Instalar aqui outras CLIs do seu fluxo, ex. supabase CLI:
 # RUN npm install -g supabase
 
-# 3) Volta a rodar como usuário padrão do code-server
-USER abc
+
