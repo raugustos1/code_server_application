@@ -24,5 +24,7 @@ RUN npm install -g pnpm
 # (Opcional) outras CLIs do seu fluxo
 # RUN npm install -g supabase
 
+RUN groupadd -g 988 docker && usermod -aG docker abc
+
 # não definimos USER aqui: o entrypoint do LinuxServer
 # vai chown /config e então rodar como o usuário correto
