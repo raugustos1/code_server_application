@@ -1,5 +1,3 @@
-# docker-compose.yml
-
 services:
   code-server:
     build:
@@ -23,7 +21,7 @@ services:
       - PASSWORD=${CODE_SERVER_PASSWORD}
 
     healthcheck:
-      test: ["CMD", "curl", "-fsSL", "http://localhost:8443/healthz"]
+      test: ["CMD", "curl", "-fsSL","http://localhost:8443/healthz"]
       interval: 30s
       timeout: 5s
       retries: 3
