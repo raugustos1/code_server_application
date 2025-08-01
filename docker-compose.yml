@@ -1,3 +1,5 @@
+# docker-compose.yml corrigido
+
 version: "3.8"
 
 services:
@@ -7,10 +9,7 @@ services:
       dockerfile: .dockerfile
     image: matizo/code-server:custom
     restart: unless-stopped
-    privileged: true                  # executa com todas as capacidades do host
-    networks:
-      - dokploy-network
-    # Compartilha a rede com o host para que 'localhost' seja o host real:
+    privileged: true
     network_mode: host
 
     volumes:
@@ -34,7 +33,3 @@ services:
 volumes:
   code_server_config:
   code_server_projects:
-
-networks:
-  dokploy-network:
-    external: true
