@@ -1,4 +1,4 @@
-# DOKPLOY CODE SERVER para projetos
+# DOKPLOY CODE SERVER
 
 ## Premissas
 - Dokploy já instalado
